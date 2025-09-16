@@ -8,6 +8,10 @@ function Book(id, title, author, pages, haveRead) {
     this.haveRead = haveRead;
 }
 
+Book.prototype.toggleRead = function() {
+    return this.haveRead = !this.haveRead;
+}
+
 document.addEventListener('DOMContentLoaded', function() {
     const libraryTable = document.getElementById("library-table");
 
@@ -15,33 +19,52 @@ document.addEventListener('DOMContentLoaded', function() {
         let id = crypto.randomUUID();
         let newBook = new Book(id, title, author, pages, haveRead);
         myLibrary.push(newBook);
+
         let newRow = libraryTable.insertRow();
+
         let newTitle = newRow.insertCell(0);
-        let newAuthor = newRow.insertCell(1);
-        let newPages = newRow.insertCell(2);
-        let newHaveRead = newRow.insertCell(3);
-        let deleteBook = newRow.insertCell(4);
-        let button = document.createElement('button');
-        // newRow.setAttribute("data-id", id);
         newTitle.textContent = newBook.title;
         newTitle.classList.add("bold");
-        newAuthor.textContent = newBook.author;
-        newPages.textContent = newBook.pages;
-        newHaveRead.textContent = newBook.haveRead;
-        button.classList.add("delete", "bold");
-        button.setAttribute("data-id", id);
-        button.textContent = "X";
-        deleteBook.append(button);
 
-        button.addEventListener("click", (event) => {
-            const bookID = event.target.getAttribute('data-id');
+        let newAuthor = newRow.insertCell(1);
+        newAuthor.textContent = newBook.author;
+
+        let newPages = newRow.insertCell(2);
+        newPages.textContent = newBook.pages;
+
+        let newHaveRead = newRow.insertCell(3);
+        newHaveRead.textContent = newBook.haveRead;
+
+        let buttons = newRow.insertCell(4);
+        let toggleReadButton  = document.createElement('button');
+        toggleReadButton.classList.add("toggle", "bold");
+        toggleReadButton.setAttribute("data-id", id);
+        toggleReadButton.textContent = "toggle read status";
+        buttons.append(toggleReadButton);
+
+        toggleReadButton.addEventListener("click", (event) => {
+            let bookID = event.target.getAttribute('data-id');
+            findBook = myLibrary.find(Book => Book.id === bookID);
+            findBook.toggleRead();
+            const row = event.target.closest('tr');
+            const cellToChange = row.children[3];
+            cellToChange.textContent = findBook.haveRead;
+        });
+
+        let deleteButton = document.createElement('button');
+        deleteButton.classList.add("delete", "bold");
+        deleteButton.setAttribute("data-id", id);
+        deleteButton.textContent = "delete";
+        buttons.append(deleteButton);
+
+        deleteButton.addEventListener("click", (event) => {
+            let bookID = event.target.getAttribute('data-id');
             bookIndex = myLibrary.findIndex(Book => Book.id === bookID);
             if (bookIndex != -1) {
                 myLibrary.splice(bookIndex, 1);
             }
             const row = event.target.closest('tr');
             libraryTable.deleteRow(row.rowIndex);
-            console.log(myLibrary);
         });
     };
 
@@ -73,7 +96,6 @@ document.addEventListener('DOMContentLoaded', function() {
         const haveReadValue = haveReadInput.value;
 
         addBookToLibrary(titleValue, authorValue, pagesValue, haveReadValue);
-        console.log(myLibrary);
         dialog.close();
         addForm.reset();
     });

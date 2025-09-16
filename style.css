@@ -36,6 +36,10 @@ table {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-.delete {
+button {
     padding: .6rem;
+}
+
+.toggle {
+    margin-right: 1rem;
 }
