@@ -20,26 +20,33 @@ document.addEventListener('DOMContentLoaded', function() {
         let newAuthor = newRow.insertCell(1);
         let newPages = newRow.insertCell(2);
         let newHaveRead = newRow.insertCell(3);
+        let deleteBook = newRow.insertCell(4);
+        let button = document.createElement('button');
+        // newRow.setAttribute("data-id", id);
         newTitle.textContent = newBook.title;
+        newTitle.classList.add("bold");
         newAuthor.textContent = newBook.author;
         newPages.textContent = newBook.pages;
         newHaveRead.textContent = newBook.haveRead;
-    }
+        button.classList.add("delete", "bold");
+        button.setAttribute("data-id", id);
+        button.textContent = "X";
+        deleteBook.append(button);
+
+        button.addEventListener("click", (event) => {
+            const bookID = event.target.getAttribute('data-id');
+            bookIndex = myLibrary.findIndex(Book => Book.id === bookID);
+            if (bookIndex != -1) {
+                myLibrary.splice(bookIndex, 1);
+            }
+            const row = event.target.closest('tr');
+            libraryTable.deleteRow(row.rowIndex);
+            console.log(myLibrary);
+        });
+    };
 
     addBookToLibrary("The Hobbit", "J.R.R. Tolkien", 246, true);
     addBookToLibrary("War and Peace", "Leo Tolstoy", 543, false);
-
-    // myLibrary.forEach( (book) => {
-    //     let newRow = libraryTable.insertRow();
-    //     let title = newRow.insertCell(0);
-    //     let author = newRow.insertCell(1);
-    //     let pages = newRow.insertCell(2);
-    //     let haveRead = newRow.insertCell(3);
-    //     title.textContent = book.title;
-    //     author.textContent = book.author;
-    //     pages.textContent = book.pages;
-    //     haveRead.textContent = book.haveRead;
-    // });
 
     const newBook = document.getElementById("new-book");
     const cancelButton = document.getElementById("cancel");
@@ -69,6 +76,5 @@ document.addEventListener('DOMContentLoaded', function() {
         console.log(myLibrary);
         dialog.close();
         addForm.reset();
-    })
-
+    });
 });
