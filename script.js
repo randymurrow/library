@@ -37,7 +37,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         let buttons = newRow.insertCell(4);
         let toggleReadButton  = document.createElement('button');
-        toggleReadButton.classList.add("toggle", "bold");
+        toggleReadButton.classList.add("toggle");
         toggleReadButton.setAttribute("data-id", id);
         toggleReadButton.textContent = "toggle read status";
         buttons.append(toggleReadButton);
@@ -52,7 +52,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 
         let deleteButton = document.createElement('button');
-        deleteButton.classList.add("delete", "bold");
+        deleteButton.classList.add("delete");
         deleteButton.setAttribute("data-id", id);
         deleteButton.textContent = "delete";
         buttons.append(deleteButton);
